@@ -1,2 +1,2 @@
 # CSE_100Labs
-Labs for my CSE 100 Course
+Welcome to my github you will find CSE 100 and CSE 165 labs. This folder is for CSE100 hopefully this will help. Thank you.
