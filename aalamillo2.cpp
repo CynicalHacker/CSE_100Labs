@@ -1,20 +1,40 @@
 #include<iostream>
 #include <stdlib.h>
-#include<vector>
 #include<list>
-using namespace std;
+#include<iterator>
+//using namespace std;
 
 class Hash { 
-        list<int> *hashtable;
+        std::list<int> *hashtable;
+        int key;
     public:
-        Hash(int num);
+            Hash(int k);
         void insertItem(int n);
-        void deleteItem(int num);
-        int hashFunction(int k){
-            return(k % 10);
-        }
+            void deleteItem(int num);
+            int hashFunction(int k){
+                return(k % key);
+            }
 
 };
+
+Hash::Hash(int k){
+        this->key = k;
+        hashtable = new std::list<int>[key];
+}
+
+void Hash::insertItem(int n){
+        int indexValue = hashFunction(n);
+        hashtable[indexValue].push_back(n);
+}
+ void Hash::deleteItem(int num){
+     int deleteIndex = hashFunction(num);
+     for (std::list<int>::const_iterator iterator = hashtable[deleteIndex].begin(), end = hashtable[deleteIndex].end(); iterator != end; ++iterator){
+         if (*iterator == num ){
+               hashtable[deleteIndex].remove(*iterator);
+         }
+     }
+     
+ }
 
 // int main(){
 
