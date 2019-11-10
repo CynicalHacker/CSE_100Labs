@@ -10,12 +10,12 @@ class SCC{
         
 
         void ID(int vertex, bool checked[], std::stack<int> &Stack);
-        void DFS(int vertex, bool checked[]);
+        void DFS(int vertex, bool checked[],int vCount, int arr[]);
     
     public:
     SCC(int vert);
     void connectedEdge(int vertex, int w);
-    void printSCC(int edgeCount);
+    void printSCC(int arr[]);
 
     SCC getTranspose();
     //~SCC();
@@ -30,15 +30,16 @@ SCC::SCC(int vert){
 
 
 
-void SCC:: DFS(int vertex, bool checked[]){
+void SCC:: DFS(int vertex, bool checked[], int vCount, int arr[]){
         checked[vertex] = true;
-        std::cout << vertex << std::endl;
+        arr[vertex] = vCount;
+        //std::cout << vertex << std::endl;
 
         std::list<int>::iterator i ;
             for( i = adjacent[vertex].begin(); i != adjacent[vertex].end(); ++i){
                     
                     if(checked[*i] == false){
-                            DFS(*i, checked);
+                            DFS(*i, checked,vCount,arr);
                     }
             }
 }
@@ -73,66 +74,90 @@ void SCC::ID(int vertex, bool checked[], std::stack<int> &Stack){
             Stack.push(vertex);
 }
 
-void SCC::printSCC(int edgeCount){
+void SCC::printSCC(int arr[]){
 
         std::stack<int> Stack;
 
     
         bool *visited = new bool[vert];
-        for(int i = 0; i < vert; i++){
+        for(int i = 0; i < vert; i++)
                 visited[i] = false;
-        }
+        
 
-        for(int i =0; i < vert; i++){
-                if(!visited[i]){
-                        ID(i, visited, Stack);
-            }
-        }
+        for(int i =0; i < vert; i++)
+                if(!visited[i])
+                    ID(i, visited, Stack);
+            
+        
 
         SCC reversed = getTranspose();
 
-        for(int i = 0; i < vert; i++){
+
+        for(int i = 0; i < vert; i++)
                 visited[i] = false;
-        }
+        
 
         do{
-            int vert = Stack.top();
+            int vertex = Stack.top();
             Stack.pop();
 
-            if(visited[vert] == false){
-                reversed.DFS(vert, visited);
-                int root = vert;
-                for(int i = 0; i < edgeCount;i++){
-
-                }
-            }
+            if(visited[vertex] == false){
+                reversed.DFS(vertex, visited,vertex, arr);
+                int root = vertex;
+                for(int i = 0; i < vert;i++){
+                        if(arr[i] == vertex){
+                                if(root > i)
+                                    root = i; 
+                            }
+                        }
+                            for(int i = 0; i < vert; i ++){
+                                if(arr[i] == vertex)
+                                        arr[i] = root;                     
+                            }
+                        }
+                    }while(!Stack.empty());
             
 
-            
-        } while(!Stack.empty());
-
+            for(int i =0; i < vert; i ++){
+              std::cout<<arr[i]<<std::endl;
+          }
+        }
+         //while(!Stack.empty());
     
-}
+
 
 int main(){
-        // int vCount;
-        // std::cin >> vCount;
-        SCC g(9);
-        g.connectedEdge(0,1);
-        g.connectedEdge(2,3);
-        g.connectedEdge(4,5);
-        g.connectedEdge(6,7);
-        g.connectedEdge(8,6);
+         int vCount;
+        std::cin >> vCount;
+        SCC g(vCount);
+        int numEdge;
+         std::cin >> numEdge;
+         for(int i = 0; i < numEdge; i ++){
+            int n1,n2;
+            std::cin >> n1 >> n2;
+            g.connectedEdge(n1,n2);
+         }
 
+        // SCC g(9);
+        // g.connectedEdge(0,1);
+        // g.connectedEdge(2,3);
+        // g.connectedEdge(4,5);
+        // g.connectedEdge(6,7);
+        // g.connectedEdge(8,9);
 
-        // int numEdge;
-        // std::cin >> numEdge;
-        // for(int i = 0; i < numEdge; i ++){
-        //     int n1,n2;
-        //     std::cin >> n1 >> n2;
-        //     g.connectedEdge(n1,n2);
-        // } 
-          g.printSCC(5);
+         //std::vector<int>vec;
+        int arr[vCount];
+        for(int i = 0; i < vCount; i++){
+            arr[i] = 0 ;
+        }
+        //  for(int i = 0 ; i < vCount; i ++){
+        //      vec.push_back(0);
+        //  } 
+          g.printSCC(arr);
+
+        //   for(int i =0; i < vCount; i ++){
+        //       std::cout<<arr[i]<<std::endl;
+        //   }
           return 0;
         
         // int vertexCount;
