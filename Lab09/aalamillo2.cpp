@@ -6,6 +6,7 @@
 
 class SCC{
         int vert;
+        int edgeCount;
         std::list<int> *adjacent;
         
 
@@ -13,7 +14,7 @@ class SCC{
         void DFS(int vertex, bool checked[],int vCount, int arr[]);
     
     public:
-    SCC(int vert);
+    SCC(int vert,int edgeCount);
     void connectedEdge(int vertex, int w);
     void printSCC(int arr[]);
 
@@ -22,10 +23,10 @@ class SCC{
 };                                                                 
 
 
-SCC::SCC(int vert){
+SCC::SCC(int vert,int edgeCount){
     this->vert = vert;
-
     adjacent = new std::list<int>[vert];
+    this->edgeCount = edgeCount;
 }
 
 
@@ -46,7 +47,7 @@ void SCC:: DFS(int vertex, bool checked[], int vCount, int arr[]){
 
 
  SCC SCC::getTranspose(){
-     SCC m(vert);
+     SCC m(vert,edgeCount);
         for(int i = 0; i < vert; i++){
                 //std::list<int>::iterator j;
                     for(std::list<int>::iterator j = adjacent[i].begin(); j != adjacent[i].end();++j){
@@ -75,6 +76,11 @@ void SCC::ID(int vertex, bool checked[], std::stack<int> &Stack){
 }
 
 void SCC::printSCC(int arr[]){
+
+
+for(int i = 0; i < vert; i++){
+            arr[i] = 0 ;
+        }
 
         std::stack<int> Stack;
 
@@ -105,8 +111,7 @@ void SCC::printSCC(int arr[]){
                 reversed.DFS(vertex, visited,vertex, arr);
                 int root = vertex;
                 for(int i = 0; i < vert;i++){
-                        if(arr[i] == vertex){
-                                if(root > i)
+                        if(arr[i] == vertex && root > i){ 
                                     root = i; 
                             }
                         }
@@ -129,8 +134,8 @@ void SCC::printSCC(int arr[]){
 int main(){
          int vCount;
         std::cin >> vCount;
-        SCC g(vCount);
         int numEdge;
+        SCC g(vCount,numEdge);
          std::cin >> numEdge;
          for(int i = 0; i < numEdge; i ++){
             int n1,n2;
@@ -147,9 +152,9 @@ int main(){
 
          //std::vector<int>vec;
         int arr[vCount];
-        for(int i = 0; i < vCount; i++){
-            arr[i] = 0 ;
-        }
+        // for(int i = 0; i < vCount; i++){
+        //     arr[i] = 0 ;
+        // }
         //  for(int i = 0 ; i < vCount; i ++){
         //      vec.push_back(0);
         //  } 
